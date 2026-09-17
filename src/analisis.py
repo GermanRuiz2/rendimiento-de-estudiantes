@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import matplotlib.pyplot as plt
+import seaborn as sns
 import re # No se incluye re en requirements.txt porque es un modulo preinstalado de python
 
 ruta_raiz = Path(__file__).resolve().parent.parent
@@ -131,3 +133,110 @@ almuerzo_analisis = df.groupby("lunch")["average_score"].agg(
 )
 print("4. Rendimiento según tipo de almuerzo:")
 print(almuerzo_analisis.round(2), "\n")
+
+
+# ==========================================================
+# 7. VISUALIZACIONES (3 GRÁFICAS) Y GUARDADO AUTOMÁTICO
+# ==========================================================
+
+# 1. Definir y asegurar la ruta de guardado en: proyecto > resultados
+ruta_resultados = ruta_raiz / "resultados"
+ruta_resultados.mkdir(parents=True, exist_ok=True)
+
+# Configuración estética global
+sns.set_theme(style="whitegrid")
+
+# ----------------------------------------------------------
+# Gráfica 1: Distribución del rendimiento académico (Barras)
+# ----------------------------------------------------------
+plt.figure(figsize=(7, 4))
+sns.countplot(
+    data=df,
+    x="performance_level",
+    order=["Bajo", "Medio", "Alto"],
+    palette="viridis",
+)
+plt.title("Distribución de Estudiantes por Nivel de Rendimiento")
+plt.xlabel("Nivel de Rendimiento")
+plt.ylabel("Cantidad de Estudiantes")
+plt.tight_layout()
+
+# Guardar figura
+plt.savefig(
+    ruta_resultados / "1_distribucion_rendimiento.png", dpi=300, bbox_inches="tight"
+)
+plt.show()
+plt.close()
+
+# ----------------------------------------------------------
+# Gráfica 2: Proporción de Estudiantes por Grupo (Pastel / Donut)
+# ----------------------------------------------------------
+plt.figure(figsize=(7, 7))
+
+conteo_grupos = df["race/ethnicity"].value_counts().sort_index()
+colores = sns.color_palette("pastel")[0 : len(conteo_grupos)]
+
+# Gráfico de pastel con visualización de porcentajes claros
+wedges, texts, autotexts = plt.pie(
+    conteo_grupos,
+    labels=conteo_grupos.index,
+    autopct="%1.1f%%",
+    startangle=140,
+    colors=colores,
+    wedgeprops={"edgecolor": "white", "linewidth": 1.5},
+)
+
+# Mejorar legibilidad de los porcentajes internos
+for autotext in autotexts:
+    autotext.set_fontsize(10)
+    autotext.set_weight("bold")
+
+plt.title("Proporción de Estudiantes por Grupo Étnico", fontsize=13)
+plt.tight_layout()
+
+# Guardar figura
+plt.savefig(
+    ruta_resultados / "2_proporcion_por_grupo.png", dpi=300, bbox_inches="tight"
+)
+plt.show()
+plt.close()
+
+# ----------------------------------------------------------
+# Gráfica 3: Promedio general por educación parental y almuerzo
+# ----------------------------------------------------------
+plt.figure(figsize=(10, 5))
+orden_padres = [
+    "some high school",
+    "high school",
+    "some college",
+    "associate's degree",
+    "bachelor's degree",
+    "master's degree",
+]
+
+sns.barplot(
+    data=df,
+    x="parental level of education",
+    y="average_score",
+    hue="lunch",
+    order=orden_padres,
+    palette="Blues",
+    errorbar=None,
+)
+plt.title("Promedio General por Educación Parental y Tipo de Almuerzo")
+plt.xlabel("Nivel Educativo de los Padres")
+plt.ylabel("Promedio General")
+plt.xticks(rotation=25)
+plt.legend(title="Almuerzo")
+plt.tight_layout()
+
+# Guardar figura
+plt.savefig(
+    ruta_resultados / "3_promedio_educacion_almuerzo.png",
+    dpi=300,
+    bbox_inches="tight",
+)
+plt.show()
+plt.close()
+
+print(f"\nGráficas guardadas con éxito en: {ruta_resultados.resolve()}")
