@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import re # No se incluye re en requirements.txt porque es un modulo preinstalado de python
 
 ruta_raiz = Path(__file__).resolve().parent.parent
 ruta_archivo = ruta_raiz / "data" / "StudentsPerformance.csv"
@@ -44,3 +45,17 @@ print(df.describe())
 # Estadísticas variables categóricas / texto
 print("\nEstadísticas variables categóricas:")
 print(df.describe(include=["object", "category"]))
+
+
+# === CALIDAD DE LOS DATOS ===
+print("\n==== REPORTE DE CALIDAD DE LOS DATOS ====\n")
+
+print("COMPLETITUD")
+completitud = (df.notnull().sum() / len(df)) * 100
+for columna, porcentaje in completitud.items():
+    print(f"{columna}: {porcentaje:.2f}%")
+
+print("\nCONSISTENCIA:")
+duplicados = df.duplicated().sum()
+print(f"Registros Duplicados: {duplicados}")
+print(f"Porcentaje de duplicados: {(duplicados/len(df))*100:.2f}")
