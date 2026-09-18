@@ -1,2 +1,2 @@
-# rendimiento-de-estudiantes
-Base de datos 1 para la tarea ED.01.02  
+# Análisis de Promedios respecto a Diversos Factores  
+Este proyecto genera un análisis de los promedios de estudiantes de una escuela, según diferentes categorías, tales como su grupo étnico, tipo de lunch, y un analisis respecto al nivel de educación previo de los padres.
