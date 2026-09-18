@@ -29,7 +29,7 @@ Crea un entorno virtual:
    ```
 Activa el entorno virtual con el siguiente comando:
 ```bash
-   .venv\Scripts\Activate.ps1
+   .venv\Scripts\Activate
    ```
 Instalar dependencias de requirements.txt:
  ```bash
