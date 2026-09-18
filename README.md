@@ -27,7 +27,7 @@ Crea un entorno virtual:
  ```bash
    python -m venv .venv
    ```
-Activa el entorno virtual:
+Activa el entorno virtual con el siguiente comando:
 ```bash
    .venv\Scripts\Activate.ps1
    ```
